@@ -1,7 +1,8 @@
 import os, sys, shutil
-import tempfile, uuid, cv2
+import tempfile, uuid
 from subprocess import Popen,PIPE
 from pathlib import Path
+import cv2
 from PIL import Image
 
 
@@ -64,6 +65,10 @@ def get_byteimages(input_file):
 
 
 def save_to(input_file, out_path):
+    '''
+        input_file: path to the pdf
+        out_path: path to the directory for saving the images
+    '''
     filename_noex = os.path.splitext(os.path.basename(input_file))[0]
     if not os.path.exists(out_path):
         print('\33[33mOutput directory not exists, create ...\033[0m')
@@ -86,4 +91,3 @@ if __name__ == "__main__":
     else:
         output_path = sys.argv[2]
     save_to(pdf_path, output_path)
-
