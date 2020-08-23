@@ -34,7 +34,7 @@ def pdftoimage(input_file, img_format='jpeg', DPI='300'):
     return output_images_path
 
 
-def get_cvimages(input_file, cvFLAG=None):
+def get_cvimages(input_file, cvFLAG=-1):
     '''return a list of OpenCV images'''
     cv_lst = []
     img_lst = pdftoimage(input_file)
