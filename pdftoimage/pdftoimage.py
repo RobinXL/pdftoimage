@@ -9,6 +9,7 @@ from PIL import Image
 def pdftoimage(input_file, img_format='jpeg', DPI='300'):
     output_images_path = []
     temp_path = tempfile.mkdtemp()
+    print('temp folder created: ', temp_path)
     if type(input_file) == str and Path(input_file).is_file():
         filename = os.path.basename(input_file)
         basename = os.path.basename(filename)
@@ -26,8 +27,8 @@ def pdftoimage(input_file, img_format='jpeg', DPI='300'):
     p_status = proc.wait()
     if error:
         print('\33[31mERROR or WARNING at pdftoimage: {}\033[0m'.format(error))
-    num_page = len([im_path for im_path in Path(temp_path).rglob(os.path.splitext(basename)[0]+'*.jpg')])
-
+    # num_page = len([im_path for im_path in Path(temp_path).rglob(os.path.splitext(basename)[0]+'*.jpg')])
+    num_page = len([im_path for im_path in Path(temp_path).rglob('*.jpg')])
     for i in range(num_page):
         des_img_name = des_img[: -8] + str(i+1) + des_img[-4:]
         output_images_path.append(des_img_name)
@@ -74,13 +75,17 @@ def save_to(input_file, out_path):
         print('\33[33mOutput directory not exists, create ...\033[0m')
         os.mkdir(out_path)
     img_lst = pdftoimage(input_file)
-    for i, img_path in enumerate(img_lst):
-        new_name = filename_noex+'_page{}.jpg'.format(i+1) if len(img_lst) > 1 else filename_noex+'.jpg'
-        img_dest_path = os.path.join(out_path, new_name)
-        shutil.move(img_path, img_dest_path)
-        print('\33[32mImage created at: {}\033[0m'.format(img_dest_path))
-    shutil.rmtree(str(Path(img_path).parents[0]))
-
+    if img_lst:
+        for i, img_path in enumerate(img_lst):
+            new_name = filename_noex+'_page{}.jpg'.format(i+1) if len(img_lst) > 1 else filename_noex+'.jpg'
+            img_dest_path = os.path.join(out_path, new_name)
+            shutil.move(img_path, img_dest_path)
+            print('\33[32mImage created at: {}\033[0m'.format(img_dest_path))
+        temp_folder = str(Path(img_path).parents[0])
+        shutil.rmtree(temp_folder)
+        print('{} images has created, temp folder deleted: {}'.format(len(img_lst), temp_folder))
+    else:
+        print('No image extracted')
 
 
 if __name__ == "__main__":
