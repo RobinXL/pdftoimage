@@ -45,6 +45,7 @@ def get_cvimages(input_file, cvFLAG=-1):
         shutil.rmtree(str(Path(img_path).parents[0]))
     except:
         print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
+        pass
     return cv_lst
 
 
@@ -58,6 +59,7 @@ def get_pilimages(input_file):
         shutil.rmtree(str(Path(img_path).parents[0]))
     except:
         print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
+        pass
     return pil_lst
 
 
@@ -71,6 +73,7 @@ def get_byteimages(input_file):
         shutil.rmtree(str(Path(img_path).parents[0]))
     except:
         print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
+        pass
     return byte_lst
 
 
