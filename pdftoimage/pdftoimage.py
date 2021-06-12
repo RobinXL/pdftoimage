@@ -54,7 +54,10 @@ def get_pilimages(input_file):
     img_lst = pdftoimage(input_file)
     for img_path in img_lst:
         pil_lst.append(Image.open(img_path))
-    shutil.rmtree(str(Path(img_path).parents[0]))
+    try:
+        shutil.rmtree(str(Path(img_path).parents[0]))
+    except:
+        print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
     return pil_lst
 
 
@@ -64,7 +67,10 @@ def get_byteimages(input_file):
     img_lst = pdftoimage(input_file)
     for img_path in img_lst:
         byte_lst.append(bytearray(open(img_path, 'rb').read()))
-    shutil.rmtree(str(Path(img_path).parents[0]))
+    try:
+        shutil.rmtree(str(Path(img_path).parents[0]))
+    except:
+        print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
     return byte_lst
 
 
