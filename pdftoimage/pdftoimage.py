@@ -41,7 +41,10 @@ def get_cvimages(input_file, cvFLAG=-1):
     img_lst = pdftoimage(input_file)
     for img_path in img_lst:
         cv_lst.append(cv2.imread(img_path, flags=cvFLAG))
-    shutil.rmtree(str(Path(img_path).parents[0]))
+    try:
+        shutil.rmtree(str(Path(img_path).parents[0]))
+    except:
+        print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
     return cv_lst
 
 
