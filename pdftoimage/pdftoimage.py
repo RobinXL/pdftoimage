@@ -3,7 +3,9 @@ import tempfile, uuid
 from subprocess import Popen,PIPE
 from pathlib import Path
 import cv2
+from skimage import io
 from PIL import Image
+import numpy as np
 
 
 def pdftoimage(input_file, img_format='jpeg', DPI='300'):
@@ -45,8 +47,33 @@ def get_cvimages(input_file, cvFLAG=-1):
         shutil.rmtree(str(Path(img_path).parents[0]))
     except:
         print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
+        print('cv_lst: ', cv_lst)
         pass
     return cv_lst
+
+
+def loadImage(img_file):
+    img = io.imread(img_file)           # RGB order
+    if img.shape[0] == 2: img = img[0]
+    if len(img.shape) == 2 : img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+    if img.shape[2] == 4:   img = img[:,:,:3]
+    img = np.array(img)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    return img
+
+def get_skimages(input_file):
+    '''return a list of OpenCV images'''
+    sk_lst = []
+    img_lst = pdftoimage(input_file)
+    for img_path in img_lst:
+        sk_lst.append(loadImage(img_path))
+    try:
+        shutil.rmtree(str(Path(img_path).parents[0]))
+    except:
+        print('\33[31mERROR or WARNING at pdftoimage: Delete temporary file failed\033[0m')
+        print('sk_lst: ', sk_lst)
+        pass
+    return sk_lst
 
 
 def get_pilimages(input_file):
